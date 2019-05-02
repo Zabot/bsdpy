@@ -66,6 +66,7 @@ import logging
 import signal
 import errno
 import json
+import netifaces
 from distutils.dir_util import mkpath
 from random import randint
 
@@ -145,17 +146,11 @@ def get_ip(iface=''):
         The get_ip function retrieves the IP for the network interface BSDPY
         is running on.
     """
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sockfd = sock.fileno()
-    SIOCGIFADDR = 0x8915
-
-    ifreq = struct.pack('16sH14s', iface, socket.AF_INET, '\x00' * 14)
     try:
-        res = fcntl.ioctl(sockfd, SIOCGIFADDR, ifreq)
+        return netifaces.ifaddresses(iface)[netifaces.AF_INET][0]['addr']
     except:
-        return None
-    ip = struct.unpack('16sH2x4s8x', res)[2]
-    return socket.inet_ntoa(ip)
+        print("Failed to get ip address of {}".format(iface))
+        raise
 
 dockervars = {}
 redisvars = {}
