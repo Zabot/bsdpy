@@ -429,8 +429,10 @@ def getNbiOptions(incoming):
                 else:
                     thisnbi['id'] = nbimageinfo['Index']
 
-                thisnbi['booter'] = \
-                    find(nbimageinfo['BootFile'], path)[0]
+                abs_booter_path = find(nbimageinfo['BootFile'], path)[0]
+                tftp_path = os.path.relpath(abs_booter_path, tftprootpath)
+                thisnbi['booter'] = '/' + tftp_path
+
                 thisnbi['description'] = \
                     nbimageinfo['Description']
                 thisnbi['disabledsysids'] = \
