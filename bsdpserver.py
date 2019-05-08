@@ -147,7 +147,7 @@ def get_ip(iface=''):
         is running on.
     """
     try:
-        return netifaces.ifaddresses(iface)[netifaces.AF_INET][0]['addr']
+        return str(netifaces.ifaddresses(iface)[netifaces.AF_INET][0]['addr'])
     except:
         print("Failed to get ip address of {}".format(iface))
         raise
